@@ -1,5 +1,15 @@
 version: '3.8'
 services:
+  backend:
+    build: ./backend
+    container_name: 'backend'
+    ports:
+      - 8380:8380
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db1
+      - db2
   db1:
     image: postgres:15
     restart: always
