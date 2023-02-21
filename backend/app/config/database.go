@@ -6,11 +6,10 @@ import (
 	"os"
 )
 
-var cfg *config
+var cfg config
 
 type config struct {
-	Database1 DatabaseConfig
-	Database2 DatabaseConfig
+	Database map[string]DatabaseConfig
 }
 
 type DatabaseConfig struct {
@@ -42,15 +41,14 @@ func ParseUrl(databaseUrl string) DatabaseConfig {
 }
 
 func init() {
-	cfg = new(config)
-	cfg.Database1 = ParseUrl(os.Getenv("DB1_URL"))
-	cfg.Database2 = ParseUrl(os.Getenv("DB2_URL"))
+	cfg = config{
+		Database: map[string]DatabaseConfig{
+			"db1": ParseUrl(os.Getenv("DB1_URL")),
+			"db2": ParseUrl(os.Getenv("DB2_URL")),
+		},
+	}
 }
 
-func GetDb1() DatabaseConfig {
-	return cfg.Database1
-}
-
-func GetDb2() DatabaseConfig {
-	return cfg.Database2
+func GetDatabaseConfig(key string) DatabaseConfig {
+	return cfg.Database[key]
 }
