@@ -10,4 +10,3 @@ RUN go build -o /bin/app
 EXPOSE 8380
 
 CMD ["/bin/app"]
-
