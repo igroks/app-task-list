@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS items (
-    name VARCHAR NOT NULL PRIMARY KEY
+    id SERIAL PRIMARY KEY NOT NULL,
+    name VARCHAR NOT NULL,
+    createdAt DATE NOT NULL
 );
-
-INSERT INTO items(name) VALUES ('Teste');
