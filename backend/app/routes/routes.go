@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/igroks/sd-project/backend/app/controllers"
 )
@@ -8,6 +9,8 @@ import (
 func HandleResquest() *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 	routes := gin.Default()
+
+	routes.Use(cors.Default())
 
 	routes.GET("/metrics")
 	routes.GET("/health")
