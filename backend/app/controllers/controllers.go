@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,7 +11,6 @@ import (
 
 func Add(c *gin.Context) {
 	var requestMsg models.Request
-	var name string
 	databaseName := c.Param("databaseName")
 
 	if err := c.ShouldBindJSON(&requestMsg); err != nil {
@@ -25,8 +23,8 @@ func Add(c *gin.Context) {
 
 	db := database.OpenConn(config.GetDatabaseConfig(databaseName))
 
-	sqlQuery := `INSERT INTO items (name) VALUES ($1) RETURNING name`
-	err := db.QueryRow(sqlQuery, *requestMsg.Item).Scan(&name)
+	sqlQuery := `INSERT INTO items (name) VALUES ($1)`
+	_, err := db.Exec(sqlQuery, *requestMsg.Item)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
@@ -38,25 +36,27 @@ func Add(c *gin.Context) {
 
 	defer db.Close()
 
-	responseMsg := models.Response{
-		Message: "New item added: " + name,
-	}
-
-	c.JSON(http.StatusOK, &responseMsg)
+	c.JSON(http.StatusOK, models.Response{
+		Message: "New item added",
+	})
 }
 
 func List(c *gin.Context) {
+	var items []string
 	databaseName := c.Param("databaseName")
 
 	db := database.OpenConn(config.GetDatabaseConfig(databaseName))
 
 	sqlQuery := `SELECT name FROM items`
 	rows, err := db.Query(sqlQuery)
-	if err != nil {
-		log.Fatal(err)
-	}
 
-	var items []string
+	if err != nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: err.Error(),
+		})
+		return
+	}
 
 	for rows.Next() {
 		var item string
@@ -97,5 +97,7 @@ func Delete(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, nil)
+	c.JSON(http.StatusOK, models.Response{
+		Message: "Item deleted successfully",
+	})
 }
