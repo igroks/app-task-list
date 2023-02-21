@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"database/sql"
 	"log"
 	"net/http"
 
@@ -13,7 +12,6 @@ import (
 
 func Add(c *gin.Context) {
 	var requestMsg models.Request
-	var db *sql.DB
 	var name string
 	databaseName := c.Param("databaseName")
 
@@ -25,7 +23,7 @@ func Add(c *gin.Context) {
 		return
 	}
 
-	db = database.OpenConn(config.GetDatabaseConfig(databaseName))
+	db := database.OpenConn(config.GetDatabaseConfig(databaseName))
 
 	sqlQuery := `INSERT INTO items (name) VALUES ($1) RETURNING name`
 	err := db.QueryRow(sqlQuery, *requestMsg.Item).Scan(&name)
@@ -48,10 +46,9 @@ func Add(c *gin.Context) {
 }
 
 func List(c *gin.Context) {
-	var db *sql.DB
 	databaseName := c.Param("databaseName")
 
-	db = database.OpenConn(config.GetDatabaseConfig(databaseName))
+	db := database.OpenConn(config.GetDatabaseConfig(databaseName))
 
 	sqlQuery := `SELECT name FROM items`
 	rows, err := db.Query(sqlQuery)
@@ -73,4 +70,32 @@ func List(c *gin.Context) {
 	c.JSON(http.StatusOK, map[string][]string{
 		"items": items,
 	})
+}
+
+func Delete(c *gin.Context) {
+	var requestMsg models.Request
+	databaseName := c.Param("databaseName")
+
+	if err := c.ShouldBindJSON(&requestMsg); err != nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: err.Error(),
+		})
+		return
+	}
+
+	db := database.OpenConn(config.GetDatabaseConfig(databaseName))
+
+	sqlQuery := `DELETE FROM items WHERE name = $1`
+	_, err := db.Exec(sqlQuery, *requestMsg.Item)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, nil)
 }
