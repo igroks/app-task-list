@@ -11,7 +11,7 @@ func HandleResquest() *gin.Engine {
 
 	routes.GET("/metrics")
 	routes.GET("/health")
-	routes.POST("/add", controllers.Add)
+	routes.POST("/add/:databaseName", controllers.Add)
 
 	return routes
 }

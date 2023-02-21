@@ -1,10 +1,10 @@
 package models
 
-type MatchRequest struct {
+type Request struct {
 	Item *string `json:"item" binding:"required"`
 }
 
-type MatchResponse struct {
+type Response struct {
 	Message string `json:"msg"`
 }
 

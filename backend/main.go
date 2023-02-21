@@ -13,5 +13,6 @@ func main() {
 	flag.IntVar(&port, "port", 8380, "server listening port")
 	flag.Parse()
 
+	fmt.Printf("Listening on port %d\n", port)
 	routes.HandleResquest().Run(fmt.Sprintf(":%d", port))
 }
