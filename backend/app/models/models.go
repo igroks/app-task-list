@@ -9,6 +9,10 @@ type Item struct {
 	Duplicated bool      `json:"duplicated"`
 }
 
+type DeleteItemsRequest struct {
+	Id int `json:"id" binding:"required"`
+}
+
 type Response struct {
 	Message string `json:"msg"`
 }

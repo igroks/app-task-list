@@ -73,7 +73,7 @@ func List(c *gin.Context) {
 }
 
 func Delete(c *gin.Context) {
-	var requestItem models.Item
+	var requestItem models.DeleteItemsRequest
 	databaseName := c.Param("databaseName")
 
 	if err := c.ShouldBindJSON(&requestItem); err != nil {
@@ -87,6 +87,7 @@ func Delete(c *gin.Context) {
 	db := database.OpenConn(config.Env.Database[databaseName])
 
 	sqlQuery := `DELETE FROM items WHERE id = $1`
+
 	_, err := db.Exec(sqlQuery, requestItem.Id)
 
 	if err != nil {

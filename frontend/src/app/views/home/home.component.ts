@@ -106,13 +106,13 @@ export class HomeComponent implements OnInit{
     }
   }
 
-  // removeItems(){
-  //   this.selected.selectedOptions.selected.forEach(
-  //     (selected) => this.homeService.deleteItem(selected.value, selected.value.database).subscribe(() => {
-  //       this.loadItem(selected.value.database);
-  //     })
-  //   );
-  // }
+  removeItems(){
+    this.selected.selectedOptions.selected.forEach(
+      (selected) => this.homeService.deleteItem(selected.value.id, selected.value.database).subscribe(() => {
+        this.loadItem(selected.value.database);
+      })
+    )
+  }
 
   sort(key: string){
     this.sortedBy.key = key;
