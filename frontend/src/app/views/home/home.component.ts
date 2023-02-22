@@ -80,7 +80,6 @@ export class HomeComponent implements OnInit{
             panelClass: ['snack-success']
           });
           this.loadItem(database);
-          this.databaseForm.reset();
           this.nameControl.reset();
           this.formSubmitedd = false;
         },
