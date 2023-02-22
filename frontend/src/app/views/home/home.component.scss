@@ -73,3 +73,13 @@
   display: flex;
   align-self: flex-end;
 }
+
+.snack-success{
+  background: green;
+  color: white;
+}
+
+.snack-fail{
+  background: rgb(175, 72, 72);
+  color: white;
+}

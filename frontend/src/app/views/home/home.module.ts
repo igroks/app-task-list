@@ -12,6 +12,7 @@ import { HomeRoutingModule } from './home.routing';
 import { HomeService } from './home.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { MatMenuModule } from '@angular/material/menu';
     HomeRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSnackBarModule
   ],
   providers: [HomeService]
 })

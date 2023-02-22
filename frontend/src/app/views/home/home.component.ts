@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectionList } from '@angular/material/list';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemProps } from './home.model';
 import { HomeService } from './home.service';
 
@@ -27,7 +28,8 @@ export class HomeComponent implements OnInit{
 
   constructor(
     private homeService: HomeService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private snackBar: MatSnackBar
   ){ }
 
   ngOnInit(): void {
@@ -74,11 +76,18 @@ export class HomeComponent implements OnInit{
 
       databases.forEach((database) => this.homeService.insertItem(item, database).subscribe(
         () => {
-          console.log('inserido com sucesso');
+          this.snackBar.open('Item inserido com sucesso', 'OK', {
+            panelClass: ['snack-success']
+          });
           this.loadItem(database);
+          this.databaseForm.reset();
+          this.nameControl.reset();
+          this.formSubmitedd = false;
         },
         () => {
-          console.log('deu ruin');
+          this.snackBar.open('Erro ao inserir item', 'OK', {
+            panelClass: ['snack-fail']
+          });
         }
       ));
     } else {
