@@ -62,7 +62,7 @@ func List(c *gin.Context) {
 	for rows.Next() {
 		var item models.Item
 		fmt.Println(item)
-		rows.Scan(&item)
+		rows.Scan(&item.Id, &item.Name, &item.CreatedAt)
 		items = append(items, item)
 	}
 
