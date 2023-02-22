@@ -21,6 +21,11 @@ export class HomeComponent implements OnInit{
   nameControl = new FormControl('',[Validators.required, Validators.minLength(1)]);
   databaseForm!: FormGroup;
   formSubmitedd = false;
+  sortLabels = {
+    database: 'Banco',
+    name: 'Nome',
+    createdAt: 'Data de criação'
+  }
   sortedBy = {
     key: 'database',
     reverse: false
@@ -50,7 +55,7 @@ export class HomeComponent implements OnInit{
     this.homeService.getItems(db).subscribe((res) => {
       if(!!res){
         res.forEach((r: any) => r.database = db);
-        (this.listItemMap as any)[db] = res;
+        this.listItemMap[db] = res;
       }
       this.reloadItems();
     });

@@ -24,12 +24,10 @@
       <div>
         <button mat-button [matMenuTriggerFor]="menu">
           <mat-icon>sort</mat-icon>
-          {{ sortedBy.key }}
+          {{ sortLabels[sortedBy.key] }}
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="sort('database')">Banco</button>
-          <button mat-menu-item (click)="sort('name')">Alfabética</button>
-          <button mat-menu-item (click)="sort('createdAt')">Data de criação</button>
+          <button mat-menu-item *ngFor="let label of sortLabels | keyvalue" (click)="sort(label.key)">{{label.value}}</button>
         </mat-menu>
         <button mat-icon-button (click)="reverseSort()">
           <mat-icon [color]="sortedBy.reverse? 'primary': ''">swap_vert</mat-icon>
