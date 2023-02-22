@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit{
     key: 'database',
     reverse: false
   }
+  loading = false;
 
   constructor(
     private homeService: HomeService,
@@ -57,26 +58,29 @@ export class HomeComponent implements OnInit{
   }
 
   loadItem(db: string){
+    this.loading = true;
     this.homeService.getItems(db).subscribe((res) => {
       if(!!res){
         res.forEach((r: ItemProps) => r.database = db);
         this.listItemMap[db] = res;
       }
       this.reloadItems();
+      this.loading = false;
     });
   }
 
-  isDatabasesValid(){
+  isDatabasesInvalid(){
     return !(this.databaseForm.controls['db1'].value || this.databaseForm.controls['db2'].value) && this.formSubmitedd;
   }
 
-  isNameValid() {
+  isNameInvalid() {
     return !this.nameControl.valid && this.formSubmitedd;
   }
 
   createItem(){
     this.formSubmitedd = true;
-    if(this.nameControl.valid && this.databaseForm.valid){
+    if(!this.isNameInvalid() && !this.isDatabasesInvalid()){
+      this.loading = true;
       let databaseMap = this.databaseForm.value;
       let databases = Object.keys(databaseMap).filter((database) => databaseMap[database]);
       let item: ItemProps = {
@@ -92,7 +96,7 @@ export class HomeComponent implements OnInit{
           });
           this.loadItem(database);
           this.nameControl.reset();
-          this.formSubmitedd = false;
+          this.loading = this.formSubmitedd = false;
         },
         () => {
           this.snackBar.open('Erro ao inserir item', 'OK', {
@@ -115,6 +119,7 @@ export class HomeComponent implements OnInit{
   }
 
   sort(key: string){
+    this.loading = true;
     this.sortedBy.key = key;
     if(this.sortedBy.reverse){
       this.items = this.items.sort((a: any, b: any) => {
@@ -135,6 +140,7 @@ export class HomeComponent implements OnInit{
         return 0;
       });
     }
+    this.loading = false;
   }
 
   reverseSort(){
@@ -143,10 +149,12 @@ export class HomeComponent implements OnInit{
   }
 
   filter(key: any, value?: any){
+    this.loading = true;
     this.selectedFilter = key != 'database'? key: value;
     this.reloadItems();
     if(key != 'none'){
       this.items = this.items.filter((item) => item[key] == value);
     }
+    this.loading = false;
   }
 }

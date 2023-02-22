@@ -9,14 +9,14 @@
             <mat-icon>add</mat-icon>
           </button>
         </div>
-        <mat-error *ngIf="isNameValid()">Digite algo para inserir</mat-error>
+        <mat-error *ngIf="isNameInvalid()">Digite algo para inserir</mat-error>
       </div>
       <div class="option">
         <div class="slide-option">
           <app-slider-toggle [control]="databaseForm.controls['db1']"></app-slider-toggle><span>Banco 1</span>
           <app-slider-toggle [control]="databaseForm.controls['db2']"></app-slider-toggle><span>Banco 2</span>
         </div>
-        <mat-error *ngIf="isDatabasesValid()">Escolha ao menos uma base da dados</mat-error>
+        <mat-error *ngIf="isDatabasesInvalid()">Escolha ao menos uma base da dados</mat-error>
       </div>
     </div>
     <div class="actions">
@@ -52,6 +52,9 @@
       </button>
     </div>
     <div class="card-list">
+      <div class="card-header">
+        <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+      </div>
       <mat-selection-list class="list" #selected>
         <mat-list-option class="item" *ngFor="let item of items" [value]="item" color="primary">
           {{item?.name}}
