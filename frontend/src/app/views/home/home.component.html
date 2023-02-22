@@ -44,10 +44,12 @@
         <mat-icon [color]="selected.selectedOptions.selected.length == 0? 'gray': 'warn'">delete</mat-icon>
       </button>
     </div>
-    <mat-selection-list class="list" #selected>
-      <mat-list-option class="item" *ngFor="let item of items" [value]="item" color="primary">
-        {{item?.name}}
-      </mat-list-option>
-    </mat-selection-list>
+    <div class="card-list">
+      <mat-selection-list class="list" #selected>
+        <mat-list-option class="item" *ngFor="let item of items" [value]="item" color="primary">
+          {{item?.name}}
+        </mat-list-option>
+      </mat-selection-list>
+    </div>
   </div>
 </div>
