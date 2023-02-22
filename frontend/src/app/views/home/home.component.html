@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="content">
+    <div class="menu">
+      <div class="option">
+        <div class="input-bar">
+          <input class="input" type="text" placeholder="Digite algo" [formControl]="nameControl">
+          <button mat-mini-fab color="primary" (click)="createItem()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+        <mat-error *ngIf="isNameValid()">Digite algo para inserir</mat-error>
+      </div>
+      <div class="option">
+        <div class="slide-option" [formGroup]="databaseForm">
+          <mat-label>Inserir em:</mat-label>
+          <mat-slide-toggle color="primary" formControlName="db1">BD1</mat-slide-toggle>
+          <mat-slide-toggle color="primary" formControlName="db2">BD2</mat-slide-toggle>
+        </div>
+        <mat-error *ngIf="isDatabasesValid()">Escolha ao menos uma base da dados</mat-error>
+      </div>
+    </div>
+    <div class="list">
+      <mat-selection-list class="item-list">
+        <mat-list-option *ngFor="let item of items" class="item">
+          {{item?.name}}
+        </mat-list-option>
+      </mat-selection-list>
+    </div>
+  </div>
+</div>

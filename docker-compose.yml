@@ -3,6 +3,8 @@ services:
   frontend:
     build: ./frontend
     container_name: 'frontend'
+    environment:
+      - API_URL=http://backend:8380
     ports:
       - 4200:4200
     volumes:
@@ -14,8 +16,8 @@ services:
     build: ./backend
     container_name: 'backend'
     environment:
-      - DB1_URL=postgresql://postgres:root@db1:5432/db
-      - DB2_URL=postgresql://postgres:root@db2:5432/db
+      - DB1_URL=postgresql://postgres:root@db1:5432/db?sslmode=disable
+      - DB2_URL=postgresql://postgres:root@db2:5432/db?sslmode=disable
     ports:
       - 8380:8380
     volumes:
