@@ -21,11 +21,21 @@
     </div>
     <div class="actions">
       <div>
-        <button mat-button [matMenuTriggerFor]="menu">
+        <button mat-button [matMenuTriggerFor]="filterMenu">
+          <mat-icon>filter_list</mat-icon>
+          {{ filtersMap[selectedFilter] }}
+        </button>
+        <mat-menu #filterMenu="matMenu">
+          <button mat-menu-item (click)="filter('none')">{{filtersMap['none']}}</button>
+          <button mat-menu-item (click)="filter('database','db1')">{{filtersMap['db1']}}</button>
+          <button mat-menu-item (click)="filter('database','db2')">{{filtersMap['db2']}}</button>
+          <button mat-menu-item (click)="filter('duplicated',true)">{{filtersMap['duplicated']}}</button>
+        </mat-menu>
+        <button mat-button [matMenuTriggerFor]="sortMenu">
           <mat-icon>sort</mat-icon>
           {{ sortLabels[sortedBy.key] }}
         </button>
-        <mat-menu #menu="matMenu">
+        <mat-menu #sortMenu="matMenu">
           <button mat-menu-item *ngFor="let label of sortLabels | keyvalue" (click)="sort(label.key)">{{label.value}}</button>
         </mat-menu>
         <button mat-icon-button (click)="reverseSort()">

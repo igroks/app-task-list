@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectionList } from '@angular/material/list';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemProps } from './home.model';
@@ -29,6 +29,13 @@ export class HomeComponent implements OnInit{
     name: 'Nome',
     createdAt: 'Data de criação'
   }
+  filtersMap = {
+    none: 'Nenhum filtro',
+    db1: 'Apenas Banco 1',
+    db2: 'Apenas Banco 2',
+    duplicated: 'Em ambos os bancos'
+  }
+  selectedFilter = 'none';
   sortedBy = {
     key: 'database',
     reverse: false
@@ -52,7 +59,7 @@ export class HomeComponent implements OnInit{
   loadItem(db: string){
     this.homeService.getItems(db).subscribe((res) => {
       if(!!res){
-        res.forEach((r: any) => r.database = db);
+        res.forEach((r: ItemProps) => r.database = db);
         this.listItemMap[db] = res;
       }
       this.reloadItems();
@@ -70,12 +77,13 @@ export class HomeComponent implements OnInit{
   createItem(){
     this.formSubmitedd = true;
     if(this.nameControl.valid && this.databaseForm.valid){
-      let item: ItemProps = {
-        name: `${this.nameControl.value}`,
-        createdAt: new Date()
-      };
       let databaseMap = this.databaseForm.value;
       let databases = Object.keys(databaseMap).filter((database) => databaseMap[database]);
+      let item: ItemProps = {
+        name: `${this.nameControl.value}`,
+        createdAt: new Date(),
+        duplicated: databases.length == 2
+      };
 
       databases.forEach((database) => this.homeService.insertItem(item, database).subscribe(
         () => {
@@ -98,13 +106,13 @@ export class HomeComponent implements OnInit{
     }
   }
 
-  removeItems(){
-    this.selected.selectedOptions.selected.forEach(
-      (selected) => this.homeService.deleteItem(selected.value, selected.value.database).subscribe(() => {
-        this.loadItem(selected.value.database);
-      })
-    );
-  }
+  // removeItems(){
+  //   this.selected.selectedOptions.selected.forEach(
+  //     (selected) => this.homeService.deleteItem(selected.value, selected.value.database).subscribe(() => {
+  //       this.loadItem(selected.value.database);
+  //     })
+  //   );
+  // }
 
   sort(key: string){
     this.sortedBy.key = key;
@@ -132,5 +140,13 @@ export class HomeComponent implements OnInit{
   reverseSort(){
     this.sortedBy.reverse = !this.sortedBy.reverse;
     this.sort(this.sortedBy.key);
+  }
+
+  filter(key: any, value?: any){
+    this.selectedFilter = key != 'database'? key: value;
+    this.reloadItems();
+    if(key != 'none'){
+      this.items = this.items.filter((item) => item[key] == value);
+    }
   }
 }

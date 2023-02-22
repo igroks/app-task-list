@@ -33,8 +33,8 @@ export class HomeService {
     );
   }
 
-  deleteItem(item: ItemProps, database: string){
-    return this.http.delete(`${this.API_URL}/${database}`, { observe: 'response', body: item })
+  deleteItem(id: number, database: string){
+    return this.http.delete(`${this.API_URL}/${database}`, { observe: 'response', body: { id } })
       .pipe(map((res :  HttpResponse<any>) => {
         return res.body
       }))
