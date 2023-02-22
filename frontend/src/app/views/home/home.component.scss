@@ -87,7 +87,7 @@
 .card-list{
   padding: 16px;
   max-height: 703px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .card-list::-webkit-scrollbar {
