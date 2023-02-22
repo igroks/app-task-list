@@ -21,7 +21,7 @@
     </div>
     <div class="actions">
       <div>
-        <button mat-button [matMenuTriggerFor]="filterMenu">
+        <button mat-button [class.selected]="selectedFilter != 'none'" [matMenuTriggerFor]="filterMenu">
           <mat-icon>filter_list</mat-icon>
           {{ filtersMap[selectedFilter] }}
         </button>
