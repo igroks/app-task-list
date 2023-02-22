@@ -11,7 +11,7 @@ import { MatListModule } from '@angular/material/list';
 import { HomeRoutingModule } from './home.routing';
 import { HomeService } from './home.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -28,7 +28,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatListModule,
     HomeRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatMenuModule
   ],
   providers: [HomeService]
 })

@@ -20,6 +20,10 @@ export class HomeComponent implements OnInit{
   nameControl = new FormControl('',[Validators.required, Validators.minLength(1)]);
   databaseForm!: FormGroup;
   formSubmitedd = false;
+  sortedBy = {
+    key: 'database',
+    reverse: false
+  }
 
   constructor(
     private homeService: HomeService,
@@ -37,6 +41,7 @@ export class HomeComponent implements OnInit{
 
   reloadItems(){
     this.items = this.listItemMap.db1.concat(this.listItemMap.db2);
+    this.sort(this.sortedBy.key);
   }
 
   loadItem(db: string){
@@ -88,5 +93,33 @@ export class HomeComponent implements OnInit{
         this.loadItem(selected.value.database);
       })
     );
+  }
+
+  sort(key: string){
+    this.sortedBy.key = key;
+    if(this.sortedBy.reverse){
+      this.items = this.items.sort((a: any, b: any) => {
+        if (a[key] > b[key]) {
+          return -1;
+        } else if (a[key] < b[key]) {
+            return 1;
+        }
+        return 0;
+      });
+    }else{
+      this.items = this.items.sort((a: any, b: any) => {
+        if (a[key] > b[key]) {
+          return 1;
+        } else if (a[key] < b[key]) {
+            return -1;
+        }
+        return 0;
+      });
+    }
+  }
+
+  reverseSort(){
+    this.sortedBy.reverse = !this.sortedBy.reverse;
+    this.sort(this.sortedBy.key);
   }
 }
