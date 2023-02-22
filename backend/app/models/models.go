@@ -1,7 +1,11 @@
 package models
 
-type Request struct {
-	Item *string `json:"item" binding:"required"`
+import "time"
+
+type Item struct {
+	Id        int       `json:"id"`
+	Name      string    `json:"name" binding:"required"`
+	CreatedAt time.Time `json:"createdAt" binding:"required"`
 }
 
 type Response struct {

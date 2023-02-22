@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,10 +11,10 @@ import (
 )
 
 func Add(c *gin.Context) {
-	var requestMsg models.Request
+	var requestItem models.Item
 	databaseName := c.Param("databaseName")
 
-	if err := c.ShouldBindJSON(&requestMsg); err != nil {
+	if err := c.ShouldBindJSON(&requestItem); err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
 			Code:    http.StatusBadRequest,
 			Message: err.Error(),
@@ -21,10 +22,10 @@ func Add(c *gin.Context) {
 		return
 	}
 
-	db := database.OpenConn(config.GetDatabaseConfig(databaseName))
+	db := database.OpenConn(config.Env.Database[databaseName])
 
-	sqlQuery := `INSERT INTO items (name) VALUES ($1)`
-	_, err := db.Exec(sqlQuery, *requestMsg.Item)
+	sqlQuery := `INSERT INTO items (name, createdAt) VALUES ($1, $2)`
+	_, err := db.Exec(sqlQuery, requestItem.Name, requestItem.CreatedAt)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
@@ -42,12 +43,12 @@ func Add(c *gin.Context) {
 }
 
 func List(c *gin.Context) {
-	var items []string
+	var items []models.Item
 	databaseName := c.Param("databaseName")
 
-	db := database.OpenConn(config.GetDatabaseConfig(databaseName))
+	db := database.OpenConn(config.Env.Database[databaseName])
 
-	sqlQuery := `SELECT name FROM items`
+	sqlQuery := `SELECT id, name, createdAt FROM items`
 	rows, err := db.Query(sqlQuery)
 
 	if err != nil {
@@ -59,7 +60,8 @@ func List(c *gin.Context) {
 	}
 
 	for rows.Next() {
-		var item string
+		var item models.Item
+		fmt.Println(item)
 		rows.Scan(&item)
 		items = append(items, item)
 	}
@@ -67,16 +69,16 @@ func List(c *gin.Context) {
 	defer rows.Close()
 	defer db.Close()
 
-	c.JSON(http.StatusOK, map[string][]string{
+	c.JSON(http.StatusOK, map[string][]models.Item{
 		"items": items,
 	})
 }
 
 func Delete(c *gin.Context) {
-	var requestMsg models.Request
+	var requestItem models.Item
 	databaseName := c.Param("databaseName")
 
-	if err := c.ShouldBindJSON(&requestMsg); err != nil {
+	if err := c.ShouldBindJSON(&requestItem); err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
 			Code:    http.StatusBadRequest,
 			Message: err.Error(),
@@ -84,10 +86,10 @@ func Delete(c *gin.Context) {
 		return
 	}
 
-	db := database.OpenConn(config.GetDatabaseConfig(databaseName))
+	db := database.OpenConn(config.Env.Database[databaseName])
 
-	sqlQuery := `DELETE FROM items WHERE name = $1`
-	_, err := db.Exec(sqlQuery, *requestMsg.Item)
+	sqlQuery := `DELETE FROM items WHERE id = $1`
+	_, err := db.Exec(sqlQuery, requestItem.Id)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
