@@ -19,7 +19,10 @@ export class HomeComponent implements OnInit{
   };
   items: ItemProps[] = [];
   nameControl = new FormControl('',[Validators.required, Validators.minLength(1)]);
-  databaseForm!: FormGroup;
+  databaseForm = new FormGroup({
+    db1: new FormControl(false),
+    db2: new FormControl(false)
+  });
   formSubmitedd = false;
   sortLabels = {
     database: 'Banco',
@@ -33,17 +36,12 @@ export class HomeComponent implements OnInit{
 
   constructor(
     private homeService: HomeService,
-    private fb: FormBuilder,
     private snackBar: MatSnackBar
   ){ }
 
   ngOnInit(): void {
     this.loadItem('db1');
     this.loadItem('db2');
-    this.databaseForm = this.fb.group({
-      db1: false,
-      db2: false
-    })
   }
 
   reloadItems(){

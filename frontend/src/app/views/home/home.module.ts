@@ -13,6 +13,7 @@ import { HomeService } from './home.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { SliderToggleModule } from 'src/app/shared/components/slider-toggle/slider-toggle.module';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     FormsModule,
     ReactiveFormsModule,
     MatMenuModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    SliderToggleModule
   ],
   providers: [HomeService]
 })
