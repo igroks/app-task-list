@@ -23,8 +23,8 @@ func Add(c *gin.Context) {
 
 	db := database.OpenConn(config.Env.Database[databaseName])
 
-	sqlQuery := `INSERT INTO items (name, createdAt) VALUES ($1, $2)`
-	_, err := db.Exec(sqlQuery, requestItem.Name, requestItem.CreatedAt)
+	sqlQuery := `INSERT INTO items (name, createdAt, duplicated) VALUES ($1, $2, $3)`
+	_, err := db.Exec(sqlQuery, requestItem.Name, requestItem.CreatedAt, requestItem.Duplicated)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
@@ -47,7 +47,7 @@ func List(c *gin.Context) {
 
 	db := database.OpenConn(config.Env.Database[databaseName])
 
-	sqlQuery := `SELECT id, name, createdAt FROM items`
+	sqlQuery := `SELECT id, name, createdAt, duplicated FROM items`
 	rows, err := db.Query(sqlQuery)
 
 	if err != nil {
@@ -60,7 +60,7 @@ func List(c *gin.Context) {
 
 	for rows.Next() {
 		var item models.Item
-		rows.Scan(&item.Id, &item.Name, &item.CreatedAt)
+		rows.Scan(&item.Id, &item.Name, &item.CreatedAt, &item.Duplicated)
 		items = append(items, item)
 	}
 

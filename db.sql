@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS items (
     id SERIAL PRIMARY KEY NOT NULL,
     name VARCHAR NOT NULL,
-    createdAt DATE NOT NULL
+    createdAt DATE NOT NULL,
+    duplicated BOOLEAN NOT NULL
 );
