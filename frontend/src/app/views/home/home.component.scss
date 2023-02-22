@@ -49,11 +49,6 @@
 .list{
   display: flex;
   justify-content: center;
-}
-
-.item-list{
-  display: flex;
-  justify-content: center;
   flex-direction: column;
   row-gap: 10px;
 }
@@ -61,4 +56,15 @@
 .item{
   width: 800px;
   box-shadow: 1px 1px 3px rgb(199, 199, 199);
+}
+
+.actions{
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.delete-btn{
+  display: flex;
+  align-self: flex-end;
 }

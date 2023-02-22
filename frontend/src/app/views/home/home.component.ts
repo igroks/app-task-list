@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSelectionList } from '@angular/material/list';
 import { ItemProps } from './home.model';
 import { HomeService } from './home.service';
 
@@ -10,6 +11,7 @@ import { HomeService } from './home.service';
 })
 
 export class HomeComponent implements OnInit{
+  @ViewChild('selected') selected!: MatSelectionList;
   listItemMap = {
     db1: [],
     db2: [],
@@ -39,7 +41,10 @@ export class HomeComponent implements OnInit{
 
   loadItem(db: string){
     this.homeService.getItems(db).subscribe((res) => {
-      if(!!res) (this.listItemMap as any)[db] = res;
+      if(!!res){
+        res.forEach((r: any) => r.database = db);
+        (this.listItemMap as any)[db] = res;
+      }
       this.reloadItems();
     });
   }
@@ -75,5 +80,13 @@ export class HomeComponent implements OnInit{
       this.nameControl.updateValueAndValidity();
       this.databaseForm.updateValueAndValidity();
     }
+  }
+
+  removeItems(){
+    this.selected.selectedOptions.selected.forEach(
+      (selected) => this.homeService.deleteItem(selected.value, selected.value.database).subscribe(() => {
+        this.loadItem(selected.value.database);
+      })
+    );
   }
 }

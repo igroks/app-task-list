@@ -1,5 +1,6 @@
 <div class="container">
   <div class="content">
+    <h1>My Items</h1>
     <div class="menu">
       <div class="option">
         <div class="input-bar">
@@ -19,12 +20,20 @@
         <mat-error *ngIf="isDatabasesValid()">Escolha ao menos uma base da dados</mat-error>
       </div>
     </div>
-    <div class="list">
-      <mat-selection-list class="item-list">
-        <mat-list-option *ngFor="let item of items" class="item">
-          {{item?.name}}
-        </mat-list-option>
-      </mat-selection-list>
+    <div class="actions">
+      <button
+        mat-icon-button
+        class="delete-btn"
+        (click)="removeItems()"
+        [disabled]="selected.selectedOptions.selected.length == 0"
+      >
+        <mat-icon [color]="selected.selectedOptions.selected.length == 0? 'gray': 'warn'">delete</mat-icon>
+      </button>
     </div>
+    <mat-selection-list class="list" #selected>
+      <mat-list-option class="item" *ngFor="let item of items" [value]="item">
+        {{item?.name}}
+      </mat-list-option>
+    </mat-selection-list>
   </div>
 </div>
