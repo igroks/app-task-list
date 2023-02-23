@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit{
   items: ItemProps[] = [];
   nameControl = new FormControl('',[Validators.required, Validators.minLength(1)]);
   databaseForm = new FormGroup({
-    db1: new FormControl(false),
+    db1: new FormControl(true),
     db2: new FormControl(false)
   });
   formSubmitedd = false;
