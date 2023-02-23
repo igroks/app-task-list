@@ -94,7 +94,8 @@ export class HomeComponent implements OnInit{
       databases.forEach((database) => this.homeService.insertItem(item, database).subscribe(
         () => {
           this.snackBar.open('Item inserido com sucesso', 'OK', {
-            panelClass: ['snack-success']
+            panelClass: ['snack-success'],
+            duration: 1000
           });
           this.loadItem(database);
           this.nameControl.reset();
@@ -102,7 +103,8 @@ export class HomeComponent implements OnInit{
         },
         () => {
           this.snackBar.open('Erro ao inserir item', 'OK', {
-            panelClass: ['snack-fail']
+            panelClass: ['snack-fail'],
+            duration: 1000
           });
         }
       ));
