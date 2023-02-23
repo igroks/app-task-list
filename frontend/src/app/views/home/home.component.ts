@@ -63,6 +63,8 @@ export class HomeComponent implements OnInit{
       if(!!res){
         res.forEach((r: ItemProps) => r.database = db);
         this.listItemMap[db] = res;
+      } else {
+        this.listItemMap[db] = [];
       }
       this.reloadItems();
       this.loading = false;
@@ -112,10 +114,15 @@ export class HomeComponent implements OnInit{
 
   removeItems(){
     this.selectedItems.forEach(
-      (selected) => this.homeService.deleteItem(selected.id!, selected.database!).subscribe(() => {
-        this.loadItem(selected.database!);
-      })
-    )
+      (selected) => {
+        this.loading = true;
+        this.homeService.deleteItem(selected.id!, selected.database!).subscribe(() => {
+          this.loadItem(selected.database!);
+          this.loading = false;
+        });
+      }
+    );
+    this.selectedItems = [];
   }
 
   sort(key: string){
