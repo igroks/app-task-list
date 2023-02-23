@@ -4,7 +4,7 @@
     <div class="menu">
       <div class="option">
         <div class="input-bar">
-          <input class="input" type="text" placeholder="Digite algo" [formControl]="nameControl">
+          <input class="input" type="text" placeholder="Digite algo" [formControl]="nameControl" (keydown.enter)="createItem()">
           <button mat-mini-fab color="primary" (click)="createItem()">
             <mat-icon>add</mat-icon>
           </button>
