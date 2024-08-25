@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatListOption } from '@angular/material/list';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemProps } from './home.model';
@@ -13,27 +13,15 @@ import { HomeService } from './home.service';
 
 export class HomeComponent implements OnInit{
   selectedItems: ItemProps[] = [];
-  listItemMap = {
-    db1: [],
-    db2: [],
-  };
   items: ItemProps[] = [];
   nameControl = new FormControl('',[Validators.required, Validators.minLength(1)]);
-  databaseForm = new FormGroup({
-    db1: new FormControl(true),
-    db2: new FormControl(false)
-  });
   formSubmitedd = false;
   sortLabels = {
-    database: 'Banco',
     name: 'Nome',
     createdAt: 'Data de criação'
   }
   filtersMap = {
     none: 'Nenhum filtro',
-    db1: 'Apenas Banco 1',
-    db2: 'Apenas Banco 2',
-    duplicated: 'Em ambos os bancos'
   }
   selectedFilter = 'none';
   sortedBy = {
@@ -48,31 +36,21 @@ export class HomeComponent implements OnInit{
   ){ }
 
   ngOnInit(): void {
-    this.loadItem('db1');
-    this.loadItem('db2');
+    this.loadItems();
   }
 
-  reloadItems(){
-    this.items = this.listItemMap.db1.concat(this.listItemMap.db2);
-    this.sort(this.sortedBy.key);
-  }
-
-  loadItem(db: string){
+  loadItems() {
     this.loading = true;
-    this.homeService.getItems(db).subscribe((res) => {
-      if(!!res){
-        res.forEach((r: ItemProps) => r.database = db);
-        this.listItemMap[db] = res;
-      } else {
-        this.listItemMap[db] = [];
+    this.homeService.getItems().subscribe({
+      next: (res) => {
+        this.items = res;
+        this.sort(this.sortedBy.key); 
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
       }
-      this.reloadItems();
-      this.loading = false;
     });
-  }
-
-  isDatabasesInvalid(){
-    return !(this.databaseForm.controls['db1'].value || this.databaseForm.controls['db2'].value) && this.formSubmitedd;
   }
 
   isNameInvalid() {
@@ -81,36 +59,33 @@ export class HomeComponent implements OnInit{
 
   createItem(){
     this.formSubmitedd = true;
-    if(!this.isNameInvalid() && !this.isDatabasesInvalid()){
+    if(!this.isNameInvalid()){
       this.loading = true;
-      let databaseMap = this.databaseForm.value;
-      let databases = Object.keys(databaseMap).filter((database) => databaseMap[database]);
       let item: ItemProps = {
         name: `${this.nameControl.value}`,
         createdAt: new Date(),
-        duplicated: databases.length == 2
       };
 
-      databases.forEach((database) => this.homeService.insertItem(item, database).subscribe(
-        () => {
+      this.homeService.insertItem(item).subscribe({
+        next: () => {
           this.snackBar.open('Item inserido com sucesso', 'OK', {
             panelClass: ['snack-success'],
             duration: 1000
           });
-          this.loadItem(database);
+          this.loadItems();
           this.nameControl.reset();
           this.loading = this.formSubmitedd = false;
         },
-        () => {
+        error: () => {
           this.snackBar.open('Erro ao inserir item', 'OK', {
             panelClass: ['snack-fail'],
             duration: 1000
           });
+          this.loading = this.formSubmitedd = false;
         }
-      ));
+      });
     } else {
       this.nameControl.updateValueAndValidity();
-      this.databaseForm.updateValueAndValidity();
     }
   }
 
@@ -118,8 +93,8 @@ export class HomeComponent implements OnInit{
     this.selectedItems.forEach(
       (selected) => {
         this.loading = true;
-        this.homeService.deleteItem(selected.id!, selected.database!).subscribe(() => {
-          this.loadItem(selected.database!);
+        this.homeService.deleteItem(selected.id!).subscribe(() => {
+          this.loadItems();
           this.loading = false;
         });
       }
@@ -160,7 +135,7 @@ export class HomeComponent implements OnInit{
   filter(key: any, value?: any){
     this.loading = true;
     this.selectedFilter = key != 'database'? key: value;
-    this.reloadItems();
+    this.loadItems();
     if(key != 'none'){
       this.items = this.items.filter((item) => item[key] == value);
     }

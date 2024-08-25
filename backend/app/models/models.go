@@ -6,7 +6,6 @@ type Item struct {
 	Id         int       `json:"id"`
 	Name       string    `json:"name" binding:"required"`
 	CreatedAt  time.Time `json:"createdAt" binding:"required"`
-	Duplicated bool      `json:"duplicated"`
 }
 
 type DeleteItemsRequest struct {

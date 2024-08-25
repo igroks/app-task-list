@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/igroks/sd-project/backend/app/routes"
+	"github.com/igroks/app-task-list/backend/app/routes"
 )
 
 func main() {

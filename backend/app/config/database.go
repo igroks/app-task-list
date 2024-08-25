@@ -7,14 +7,11 @@ import (
 var Env Evironment
 
 type Evironment struct {
-	Database map[string]string
+	Database string
 }
 
 func init() {
-	Env = Evironment{
-		Database: map[string]string{
-			"db1": os.Getenv("DB1_URL"),
-			"db2": os.Getenv("DB2_URL"),
-		},
+	Env = Evironment {
+		Database: os.Getenv("DB_URL"),
 	}
 }

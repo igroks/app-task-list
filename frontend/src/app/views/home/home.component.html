@@ -1,47 +1,46 @@
 <div class="container">
   <div class="content">
     <h1>Minha Lista</h1>
+
     <div class="menu">
       <div class="option">
         <div class="input-bar">
           <input class="input" type="text" placeholder="Digite algo" [formControl]="nameControl" (keydown.enter)="createItem()">
+
           <button mat-mini-fab color="primary" (click)="createItem()">
             <mat-icon>add</mat-icon>
           </button>
         </div>
+
         <mat-error *ngIf="isNameInvalid()">Digite algo para inserir</mat-error>
       </div>
-      <div class="option">
-        <div class="slide-option">
-          <app-slider-toggle [control]="databaseForm.controls['db1']"></app-slider-toggle><span>Banco 1</span>
-          <app-slider-toggle [control]="databaseForm.controls['db2']"></app-slider-toggle><span>Banco 2</span>
-        </div>
-        <mat-error *ngIf="isDatabasesInvalid()">Escolha ao menos uma base da dados</mat-error>
-      </div>
     </div>
+
     <div class="actions">
       <div>
         <button mat-button [class.selected]="selectedFilter != 'none'" [matMenuTriggerFor]="filterMenu">
           <mat-icon>filter_list</mat-icon>
           {{ filtersMap[selectedFilter] }}
         </button>
+
         <mat-menu #filterMenu="matMenu">
           <button mat-menu-item (click)="filter('none')">{{filtersMap['none']}}</button>
-          <button mat-menu-item (click)="filter('database','db1')">{{filtersMap['db1']}}</button>
-          <button mat-menu-item (click)="filter('database','db2')">{{filtersMap['db2']}}</button>
-          <button mat-menu-item (click)="filter('duplicated',true)">{{filtersMap['duplicated']}}</button>
         </mat-menu>
+
         <button mat-button [matMenuTriggerFor]="sortMenu">
           <mat-icon>sort</mat-icon>
           {{ sortLabels[sortedBy.key] }}
         </button>
+
         <mat-menu #sortMenu="matMenu">
           <button mat-menu-item *ngFor="let label of sortLabels | keyvalue" (click)="sort(label.key)">{{label.value}}</button>
         </mat-menu>
+
         <button mat-icon-button (click)="reverseSort()">
           <mat-icon [color]="sortedBy.reverse? 'primary': ''">swap_vert</mat-icon>
         </button>
       </div>
+
       <button
         mat-icon-button
         class="delete-btn"
@@ -51,10 +50,12 @@
         <mat-icon [color]="selectedItems.length == 0? 'gray': 'warn'">delete</mat-icon>
       </button>
     </div>
+
     <div class="card-list" *ngIf="items.length != 0; else notFound">
       <div class="card-header">
         <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
       </div>
+
       <mat-selection-list class="list" #selected (selectionChange)="onSelection($event, selected.selectedOptions.selected)">
         <mat-list-option class="item" *ngFor="let item of items" [value]="item" color="primary">
           {{item?.name}}

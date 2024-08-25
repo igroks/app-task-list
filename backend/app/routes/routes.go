@@ -3,7 +3,7 @@ package routes
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/igroks/sd-project/backend/app/controllers"
+	"github.com/igroks/app-task-list/backend/app/controllers"
 )
 
 func HandleResquest() *gin.Engine {
@@ -14,9 +14,9 @@ func HandleResquest() *gin.Engine {
 
 	routes.GET("/metrics")
 	routes.GET("/health")
-	routes.POST("/:databaseName", controllers.Add)
-	routes.GET("/:databaseName", controllers.List)
-	routes.DELETE("/:databaseName", controllers.Delete)
+	routes.POST("/item", controllers.Add)
+	routes.GET("/items", controllers.List)
+	routes.DELETE("/item", controllers.Delete)
 
 	return routes
 }

@@ -1,4 +1,4 @@
-module github.com/igroks/sd-project/backend
+module github.com/igroks/app-task-list/backend
 
 go 1.20
 
