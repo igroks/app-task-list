@@ -11,7 +11,6 @@ import (
 
 func Add(c *gin.Context) {
 	var requestItem models.Item
-	databaseName := c.Param("databaseName")
 
 	if err := c.ShouldBindJSON(&requestItem); err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
@@ -21,10 +20,10 @@ func Add(c *gin.Context) {
 		return
 	}
 
-	db := database.OpenConn(config.Env.Database[databaseName])
+	db := database.OpenConn(config.Env.Database)
 
-	sqlQuery := `INSERT INTO items (name, createdAt, duplicated) VALUES ($1, $2, $3)`
-	_, err := db.Exec(sqlQuery, requestItem.Name, requestItem.CreatedAt, requestItem.Duplicated)
+	sqlQuery := `INSERT INTO items (name, createdAt) VALUES ($1, $2)`
+	_, err := db.Exec(sqlQuery, requestItem.Name, requestItem.CreatedAt)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
@@ -43,11 +42,10 @@ func Add(c *gin.Context) {
 
 func List(c *gin.Context) {
 	var items []models.Item
-	databaseName := c.Param("databaseName")
 
-	db := database.OpenConn(config.Env.Database[databaseName])
+	db := database.OpenConn(config.Env.Database)
 
-	sqlQuery := `SELECT id, name, createdAt, duplicated FROM items`
+	sqlQuery := `SELECT id, name, createdAt FROM items`
 	rows, err := db.Query(sqlQuery)
 
 	if err != nil {
@@ -60,7 +58,7 @@ func List(c *gin.Context) {
 
 	for rows.Next() {
 		var item models.Item
-		rows.Scan(&item.Id, &item.Name, &item.CreatedAt, &item.Duplicated)
+		rows.Scan(&item.Id, &item.Name, &item.CreatedAt)
 		items = append(items, item)
 	}
 
@@ -73,22 +71,13 @@ func List(c *gin.Context) {
 }
 
 func Delete(c *gin.Context) {
-	var requestItem models.DeleteItemsRequest
-	databaseName := c.Param("databaseName")
+	taskId := c.Param("taskId")
 
-	if err := c.ShouldBindJSON(&requestItem); err != nil {
-		c.JSON(http.StatusBadRequest, models.ErrorResponse{
-			Code:    http.StatusBadRequest,
-			Message: err.Error(),
-		})
-		return
-	}
-
-	db := database.OpenConn(config.Env.Database[databaseName])
+	db := database.OpenConn(config.Env.Database)
 
 	sqlQuery := `DELETE FROM items WHERE id = $1`
 
-	_, err := db.Exec(sqlQuery, requestItem.Id)
+	_, err := db.Exec(sqlQuery, taskId)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{

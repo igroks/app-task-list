@@ -14,9 +14,9 @@ func HandleResquest() *gin.Engine {
 
 	routes.GET("/metrics")
 	routes.GET("/health")
-	routes.POST("/:databaseName", controllers.Add)
-	routes.GET("/:databaseName", controllers.List)
-	routes.DELETE("/:databaseName", controllers.Delete)
+	routes.POST("/task", controllers.Add)
+	routes.GET("/task", controllers.List)
+	routes.DELETE("/task/:taskId", controllers.Delete)
 
 	return routes
 }

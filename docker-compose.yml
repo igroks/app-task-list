@@ -16,49 +16,33 @@ services:
     build: ./backend
     container_name: 'backend'
     environment:
-      - DB1_URL=postgresql://postgres:root@db1:5432/db?sslmode=disable
-      - DB2_URL=postgresql://postgres:root@db2:5432/db?sslmode=disable
+      - DB_URL=postgresql://postgres:root@db:5432/db?sslmode=disable
     ports:
       - 8380:8380
     volumes:
       - ./backend:/app
     depends_on:
-      - db1
-      - db2
+      - db
     networks:
       - app_net
 
-  db1:
+  db:
     image: postgres:15
     restart: always
-    container_name: 'db1'
+    container_name: 'db'
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=db
     volumes:
-      - db_1:/var/lib/postgresql/data
-      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
-    networks:
-      - app_net
-
-  db2:
-    image: postgres:15
-    restart: always
-    container_name: 'db2'
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=db
-    volumes:
-      - db_2:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
       - ./db.sql:/docker-entrypoint-initdb.d/db.sql
     networks:
       - app_net
 
 networks:
   app_net:
+    driver: bridge
 
 volumes:
-  db_1:
-  db_2:
+  db:

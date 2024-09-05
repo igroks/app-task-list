@@ -7,12 +7,12 @@ import { ItemProps } from './home.model';
 
 @Injectable()
 export class HomeService {
-  private readonly API_URL = environment.apiUrl;
+  private readonly API_URL = environment.apiUrl + '/task';
 
   constructor(private http: HttpClient) { }
 
-  getItems(database: string){
-    return this.http.get(`${this.API_URL}/${database}`, { observe: 'response' })
+  getItems(){
+    return this.http.get(`${this.API_URL}`, { observe: 'response' })
       .pipe(map((res :  HttpResponse<any>) => {
         return res.body.items
       }))
@@ -22,8 +22,8 @@ export class HomeService {
     );
   }
 
-  insertItem(item: ItemProps, database: string){
-    return this.http.post(`${this.API_URL}/${database}`, item, { observe: 'response' })
+  insertItem(item: ItemProps){
+    return this.http.post(`${this.API_URL}`, item, { observe: 'response' })
       .pipe(map((res :  HttpResponse<any>) => {
         return res.body
       }))
@@ -33,8 +33,8 @@ export class HomeService {
     );
   }
 
-  deleteItem(id: number, database: string){
-    return this.http.delete(`${this.API_URL}/${database}`, { observe: 'response', body: { id } })
+  deleteItem(id: number){
+    return this.http.delete(`${this.API_URL}/${id}`, { observe: 'response' })
       .pipe(map((res :  HttpResponse<any>) => {
         return res.body
       }))

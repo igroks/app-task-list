@@ -2,6 +2,7 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
+@use 'sass:map';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -28,6 +29,16 @@ $frontend-theme: mat.define-light-theme((
   )
 ));
 
+$color-config: mat.get-color-config($frontend-theme);
+$primary-palette: map.get($color-config, 'primary');
+$accent-palette:  map.get($color-config, 'accent');
+$warn-palette:    map.get($color-config, 'warn');
+
+$primary-color: mat.get-color-from-palette($primary-palette);
+$accent-color: mat.get-color-from-palette($accent-palette);
+$warn-color: mat.get-color-from-palette($warn-palette);
+
+
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
@@ -35,4 +46,4 @@ $frontend-theme: mat.define-light-theme((
 
 /* You can add global styles to this file, and also import other style files */
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; overflow: hidden;}

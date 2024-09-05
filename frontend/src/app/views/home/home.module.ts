@@ -13,7 +13,6 @@ import { HomeService } from './home.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { SliderToggleModule } from 'src/app/shared/components/slider-toggle/slider-toggle.module';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
@@ -34,7 +33,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     ReactiveFormsModule,
     MatMenuModule,
     MatSnackBarModule,
-    SliderToggleModule,
     MatProgressBarModule
   ],
   providers: [HomeService]
