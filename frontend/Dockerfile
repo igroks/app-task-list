@@ -6,4 +6,6 @@ COPY . .
 
 EXPOSE 4200
 
-ENTRYPOINT yarn install && yarn dev
+RUN yarn install
+
+CMD [ "yarn", "dev"]
