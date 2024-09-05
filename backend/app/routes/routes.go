@@ -3,7 +3,7 @@ package routes
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/igroks/sd-project/backend/app/controllers"
+	"github.com/igroks/app-task-list/backend/app/controllers"
 )
 
 func HandleResquest() *gin.Engine {

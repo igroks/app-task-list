@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/igroks/sd-project/backend/app/config"
-	"github.com/igroks/sd-project/backend/app/database"
-	"github.com/igroks/sd-project/backend/app/models"
+	"github.com/igroks/app-task-list/backend/app/config"
+	"github.com/igroks/app-task-list/backend/app/database"
+	"github.com/igroks/app-task-list/backend/app/models"
 )
 
 func Add(c *gin.Context) {
